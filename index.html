@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="fr" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ParkGoodVibes - Stationnement Good Vibes Only</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tailwind Configuration for custom fonts and vibrant colors -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#fdf4ff',
+                            100: '#fae8ff',
+                            500: '#d946ef',
+                            600: '#c026d3',
+                            700: '#a21caf',
+                            900: '#701a75',
+                        },
+                        vibes: {
+                            purple: '#8b5cf6',
+                            pink: '#ec4899',
+                            dark: '#0f0728'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0b0718;
+        }
+        .bg-vibes-gradient {
+            background: linear-gradient(135deg, #701a75 0%, #8b5cf6 50%, #ec4899 100%);
+        }
+        .text-gradient {
+            background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* Custom scrollbar for mobile container */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="h-full flex items-center justify-center p-0 sm:p-4 text-slate-800">
+
+    <!-- Smartphone Shell Wrapper -->
+    <div class="w-full sm:max-w-[412px] h-full sm:h-[840px] bg-slate-50 sm:rounded-[40px] shadow-2xl flex flex-col relative overflow-hidden border-0 sm:border-[8px] sm:border-slate-900">
+        
+        <!-- iOS/Android Status Bar Simulation -->
+        <div class="bg-vibes-dark text-white px-6 pt-3 pb-2 flex justify-between items-center text-xs font-medium select-none z-30 shrink-0">
+            <span id="current-time">12:28</span>
+            <div class="flex items-center space-x-2">
+                <i class="fa-solid fa-bolt text-amber-400 text-[10px]"></i>
+                <i class="fa-solid fa-wifi text-[10px]"></i>
+                <i class="fa-solid fa-battery-full text-xs text-emerald-400"></i>
+            </div>
+        </div>
+
+        <!-- App Header (ParkGoodVibes Branding) -->
+        <header class="bg-vibes-gradient text-white px-6 pb-5 pt-3 flex items-center justify-between shadow-lg z-20 shrink-0 relative overflow-hidden">
+            <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-white/10 rounded-full blur-xl pointer-events-none"></div>
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center text-white font-black text-xl shadow-inner border border-white/30">
+                    <i class="fa-solid fa-hand-holding-heart animate-pulse"></i>
+                </div>
+                <div>
+                    <h1 class="font-black text-lg tracking-wide leading-tight flex items-center space-x-1">
+                        <span>ParkGoodVibes</span>
+                        <span class="text-xs bg-amber-300 text-slate-900 font-bold px-1.5 py-0.5 rounded-full uppercase tracking-normal shadow-sm">✨ 666</span>
+                    </h1>
+                    <p class="text-xs text-purple-100 opacity-90 font-medium" id="header-subtitle">Stationnement & Good Vibes</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-2">
+                <button onclick="openHistory()" class="w-9 h-9 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center hover:bg-white/30 transition active:scale-95 border border-white/20" title="Historique">
+                    <i class="fa-solid fa-clock-rotate-left text-sm"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Scrollable App Container -->
+        <main id="app-container" class="flex-1 overflow-y-auto no-scrollbar relative flex flex-col bg-slate-100">
+
+            <!-- ================= SCREEN 1: CONFIGURATION ================= -->
+            <div id="screen-config" class="flex-1 p-5 flex flex-col justify-between pb-8 space-y-4">
+                <div class="space-y-4">
+                    
+                    <!-- Zone Card (Zone 666 - Chez Rippol) -->
+                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-purple-100 relative overflow-hidden">
+                        <div class="absolute top-0 right-0 bg-gradient-to-l from-purple-500 to-pink-500 text-white text-[9px] font-black px-3 py-1 rounded-bl-xl uppercase tracking-wider">
+                            Zone Exclusivité
+                        </div>
+                        <label class="block text-xs font-bold text-purple-400 uppercase tracking-wider mb-2">
+                            <i class="fa-solid fa-fire-flame-curved text-pink-500 mr-1"></i> Zone de stationnement
+                        </label>
+                        <div class="bg-gradient-to-r from-purple-50 to-pink-50 p-3.5 rounded-xl border border-purple-200/80 flex items-center justify-between">
+                            <div class="space-y-0.5">
+                                <div class="font-extrabold text-slate-900 text-base" id="selected-zone-name">Zone 666 - Chez Rippol</div>
+                                <div class="text-xs font-medium text-purple-700 flex items-center" id="selected-zone-rate">
+                                    <i class="fa-solid fa-tag text-[10px] mr-1 text-pink-500"></i> Tarif Good Vibes : 2,00 € / heure
+                                </div>
+                            </div>
+                            <div class="w-8 h-8 rounded-full bg-pink-500/10 text-pink-600 flex items-center justify-center font-bold text-sm">
+                                🤘
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- License Plate Card -->
+                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200/80">
+                        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
+                            <i class="fa-solid fa-car text-brand-600 mr-1"></i> Immatriculation du véhicule
+                        </label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-blue-800 font-bold text-xs bg-blue-100 rounded-l-xl px-2 border-r border-blue-200">
+                                <i class="fa-solid fa-euro-sign text-[10px] mr-1"></i>FR
+                            </div>
+                            <input type="text" id="plate-input" value="RIP-666-GV" maxlength="11" placeholder="AA-123-BB" 
+                                class="w-full pl-16 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl font-mono uppercase font-black text-slate-800 focus:outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-100 transition tracking-wider text-base"
+                                oninput="formatPlate(this)">
+                        </div>
+                        <div class="flex items-center justify-between mt-2 px-1">
+                            <span class="text-[11px] text-slate-400">Plaque personnalisée autorisée</span>
+                            <button onclick="saveDefaultPlate()" class="text-[11px] text-brand-600 font-bold hover:underline">Définir par défaut</button>
+                        </div>
+                    </div>
+
+                    <!-- Duration Selector Card -->
+                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200/80 space-y-3">
+                        <div class="flex justify-between items-center">
+                            <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                                <i class="fa-solid fa-hourglass-half text-brand-600 mr-1"></i> Durée du stationnement
+                            </label>
+                            <span class="text-xs font-extrabold text-white bg-gradient-to-r from-purple-600 to-pink-500 px-3 py-1 rounded-full shadow-sm" id="duration-badge">1 heure</span>
+                        </div>
+
+                        <!-- Quick Duration Chips -->
+                        <div class="grid grid-cols-5 gap-1.5">
+                            <button onclick="setDuration(15)" class="duration-btn py-2 text-[11px] font-semibold rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:border-brand-500 hover:text-brand-600 transition" data-mins="15">15m</button>
+                            <button onclick="setDuration(30)" class="duration-btn py-2 text-[11px] font-semibold rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:border-brand-500 hover:text-brand-600 transition" data-mins="30">30m</button>
+                            <button onclick="setDuration(60)" class="duration-btn py-2 text-[11px] font-bold rounded-xl border-2 border-brand-500 bg-brand-50 text-brand-600 shadow-sm transition" data-mins="60">1h</button>
+                            <button onclick="setDuration(120)" class="duration-btn py-2 text-[11px] font-semibold rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:border-brand-500 hover:text-brand-600 transition" data-mins="120">2h</button>
+                            <button onclick="setDuration(240)" class="duration-btn py-2 text-[11px] font-semibold rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:border-brand-500 hover:text-brand-600 transition" data-mins="240">4h</button>
+                        </div>
+
+                        <!-- Slider Input -->
+                        <div class="pt-2">
+                            <input type="range" id="duration-slider" min="15" max="360" step="15" value="60" 
+                                class="w-full accent-brand-600 cursor-pointer h-2 bg-slate-200 rounded-lg"
+                                oninput="onSliderChange(this.value)">
+                            <div class="flex justify-between text-[11px] text-slate-400 mt-1">
+                                <span>15m</span>
+                                <span>3h00</span>
+                                <span>6h max</span>
+                            </div>
+                        </div>
+
+                        <!-- End Time Preview -->
+                        <div class="bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-100 rounded-xl p-3 flex items-center justify-between text-xs text-purple-900">
+                            <span class="flex items-center font-medium"><i class="fa-regular fa-clock mr-2 text-brand-600"></i> Fin estimée :</span>
+                            <span class="font-black text-sm text-brand-700" id="end-time-preview">13:28</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer Summary & CTA -->
+                <div class="bg-white p-4 rounded-2xl shadow-xl border border-slate-200/80 space-y-3 shrink-0">
+                    <div class="flex items-center justify-between">
+                        <span class="text-slate-500 text-xs font-semibold">Montant Good Vibes</span>
+                        <div class="text-right">
+                            <span class="text-3xl font-black text-slate-900" id="total-price-display">2,00 €</span>
+                            <span class="block text-[10px] text-slate-400">TVA incluse • Taxe Rippol offerte</span>
+                        </div>
+                    </div>
+                    <button onclick="proceedToPayment()" class="w-full py-4 bg-vibes-gradient text-white rounded-xl font-extrabold hover:opacity-95 active:scale-[0.98] transition shadow-lg shadow-pink-500/25 flex items-center justify-center space-x-2 text-sm tracking-wide">
+                        <span>Valider & Payer</span>
+                        <i class="fa-solid fa-arrow-right text-xs"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- ================= SCREEN 2: PAYMENT ================= -->
+            <div id="screen-payment" class="hidden flex-1 p-5 flex flex-col justify-between pb-8">
+                <div class="space-y-4">
+                    <!-- Back Button -->
+                    <button onclick="goToConfig()" class="inline-flex items-center text-xs font-semibold text-slate-500 hover:text-slate-800 mb-1">
+                        <i class="fa-solid fa-arrow-left mr-2"></i> Modifier mon billet
+                    </button>
+
+                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200/80 space-y-2">
+                        <h2 class="font-bold text-slate-800 text-base">Récapitulatif - ParkGoodVibes</h2>
+                        <div class="divide-y divide-slate-100 text-xs">
+                            <div class="py-2.5 flex justify-between"><span class="text-slate-500">Lieu</span><span class="font-bold text-slate-800" id="pay-summary-zone">Zone 666 - Chez Rippol</span></div>
+                            <div class="py-2.5 flex justify-between"><span class="text-slate-500">Immatriculation</span><span class="font-mono font-bold text-slate-800" id="pay-summary-plate">RIP-666-GV</span></div>
+                            <div class="py-2.5 flex justify-between"><span class="text-slate-500">Durée</span><span class="font-semibold text-slate-800" id="pay-summary-duration">1 heure</span></div>
+                            <div class="py-2.5 flex justify-between font-bold text-sm"><span class="text-slate-800">Total réglé</span><span class="text-brand-600 font-black" id="pay-summary-price">2,00 €</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Payment Methods -->
+                    <div class="space-y-3">
+                        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider">Mode de paiement ParkGoodVibes</label>
+                        
+                        <!-- Credit Card Option -->
+                        <div onclick="selectPaymentMethod('card')" id="pay-option-card" class="bg-white p-4 rounded-2xl border-2 border-brand-600 shadow-sm flex items-center justify-between cursor-pointer transition">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 rounded-xl bg-purple-50 text-brand-600 flex items-center justify-center text-lg">
+                                    <i class="fa-solid fa-compact-disc"></i>
+                                </div>
+                                <div>
+                                    <div class="font-bold text-xs text-slate-800">Carte ParkGoodVibes Premium</div>
+                                    <div class="text-[11px] text-slate-500">•••• •••• •••• 6660</div>
+                                </div>
+                            </div>
+                            <div class="w-5 h-5 rounded-full bg-brand-600 flex items-center justify-center text-white text-[10px]">
+                                <i class="fa-solid fa-check"></i>
+                            </div>
+                        </div>
+
+                        <!-- Apple Pay Option -->
+                        <div onclick="selectPaymentMethod('fastpay')" id="pay-option-fastpay" class="bg-white p-4 rounded-2xl border-2 border-slate-200 shadow-sm flex items-center justify-between cursor-pointer hover:border-slate-300 transition">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center text-lg">
+                                    <i class="fa-brands fa-apple"></i>
+                                </div>
+                                <div>
+                                    <div class="font-bold text-xs text-slate-800">Apple Pay / Google Pay</div>
+                                    <div class="text-[11px] text-slate-500">Validation instantanée par Face ID</div>
+                                </div>
+                            </div>
+                            <div class="w-5 h-5 rounded-full border-2 border-slate-300 flex items-center justify-center text-transparent text-[10px]">
+                                <i class="fa-solid fa-check"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Confirm Payment Button -->
+                <div class="space-y-3 shrink-0 pt-4">
+                    <button id="pay-btn" onclick="executePayment()" class="w-full py-4 bg-emerald-600 text-white rounded-xl font-extrabold hover:bg-emerald-700 active:scale-[0.98] transition shadow-lg shadow-emerald-600/30 flex items-center justify-center space-x-2">
+                        <i class="fa-solid fa-heart text-xs"></i>
+                        <span>Confirmer et payer 2,00 €</span>
+                    </button>
+                    <p class="text-[10px] text-center text-slate-400">Session simulée • Validation automatique chez Rippol</p>
+                </div>
+            </div>
+
+            <!-- ================= SCREEN 3: ACTIVE TICKET (COUNTDOWN) ================= -->
+            <div id="screen-active" class="hidden flex-1 p-5 flex flex-col justify-between pb-8">
+                <div class="space-y-4">
+                    <!-- Status Banner -->
+                    <div class="bg-gradient-to-r from-emerald-500 to-teal-600 text-white p-4 rounded-2xl shadow-md flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-lg animate-bounce">
+                                🎸
+                            </div>
+                            <div>
+                                <h3 class="font-extrabold text-sm tracking-wide">Good Vibes Actives</h3>
+                                <p class="text-xs text-emerald-100">Enregistré : Zone 666 - Chez Rippol</p>
+                            </div>
+                        </div>
+                        <span class="px-2.5 py-1 bg-white/20 rounded-full text-[10px] font-bold tracking-wider uppercase">Valide</span>
+                    </div>
+
+                    <!-- Countdown Ring Card -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-purple-100 text-center space-y-3 relative overflow-hidden">
+                        <span class="text-xs font-bold text-purple-400 uppercase tracking-wider">Temps restant Chez Rippol</span>
+                        <div class="text-4xl font-black text-slate-900 font-mono tracking-tight" id="countdown-timer">00:59:55</div>
+                        
+                        <!-- Progress Bar -->
+                        <div class="w-full bg-slate-100 h-3 rounded-full overflow-hidden p-0.5 border border-slate-200">
+                            <div id="timer-progress" class="bg-gradient-to-r from-purple-500 to-pink-500 h-full w-full rounded-full transition-all duration-1000"></div>
+                        </div>
+
+                        <div class="flex justify-between text-xs text-slate-500 pt-1">
+                            <span>Début : <strong id="ticket-start-time">12:28</strong></span>
+                            <span>Fin : <strong id="ticket-end-time">13:28</strong></span>
+                        </div>
+                    </div>
+
+                    <!-- Ticket Details Card -->
+                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200/80 space-y-3">
+                        <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Détails de la session</div>
+                        <div class="grid grid-cols-2 gap-3 text-xs">
+                            <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+                                <span class="block text-slate-400 text-[10px]">Plaque</span>
+                                <span class="font-mono font-bold text-slate-800 text-sm" id="active-plate">RIP-666-GV</span>
+                            </div>
+                            <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+                                <span class="block text-slate-400 text-[10px]">Zone</span>
+                                <span class="font-bold text-purple-700 text-xs truncate block" id="active-zone">Zone 666</span>
+                            </div>
+                            <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+                                <span class="block text-slate-400 text-[10px]">Montant réglé</span>
+                                <span class="font-bold text-emerald-600 text-sm" id="active-price">2,00 €</span>
+                            </div>
+                            <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+                                <span class="block text-slate-400 text-[10px]">Ticket ID</span>
+                                <span class="font-mono font-bold text-slate-800 text-sm">#PGV-666</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Warning Alert (Low time) -->
+                    <div id="low-time-alert" class="hidden bg-amber-50 border border-amber-200 text-amber-800 p-3.5 rounded-2xl flex items-center space-x-3 text-xs animate-bounce">
+                        <i class="fa-solid fa-triangle-exclamation text-amber-500 text-base shrink-0"></i>
+                        <div>
+                            <span class="font-bold block">Good Vibes en baisse !</span> Plus que 5 minutes chez Rippol. Pensez à prolonger.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons (Extend / Stop) -->
+                <div class="grid grid-cols-2 gap-3 pt-4 shrink-0">
+                    <button onclick="openExtendModal()" class="py-3.5 bg-purple-50 text-purple-700 border border-purple-200 rounded-xl font-bold text-xs hover:bg-purple-100 active:scale-[0.98] transition flex items-center justify-center space-x-2">
+                        <i class="fa-solid fa-plus text-xs"></i>
+                        <span>Prolonger</span>
+                    </button>
+                    <button onclick="confirmStopParking()" class="py-3.5 bg-rose-50 text-rose-600 border border-rose-200 rounded-xl font-bold text-xs hover:bg-rose-100 active:scale-[0.98] transition flex items-center justify-center space-x-2">
+                        <i class="fa-solid fa-stop text-xs"></i>
+                        <span>Quitter le spot</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- ================= SCREEN 4: INVOICE / RECEIPT ================= -->
+            <div id="screen-invoice" class="hidden flex-1 p-5 flex flex-col justify-between pb-8">
+                <div class="space-y-4">
+                    <div class="text-center space-y-2 py-4">
+                        <div class="w-16 h-16 bg-pink-100 text-pink-600 rounded-full flex items-center justify-center mx-auto text-3xl shadow-inner">
+                            ✨
+                        </div>
+                        <h2 class="font-black text-slate-900 text-lg">Merci d'être venu Chez Rippol !</h2>
+                        <p class="text-xs text-slate-500">Reçu officiel ParkGoodVibes</p>
+                    </div>
+
+                    <!-- Receipt Ticket -->
+                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200/80 space-y-4 relative overflow-hidden">
+                        <div class="flex justify-between items-center border-b border-dashed border-slate-200 pb-3">
+                            <span class="text-xs font-bold text-slate-400 uppercase">Reçu ParkGoodVibes</span>
+                            <span class="text-[11px] font-mono bg-purple-50 text-purple-700 px-2.5 py-0.5 rounded-full font-bold">Validé 🤘</span>
+                        </div>
+                        
+                        <div class="space-y-2.5 text-xs">
+                            <div class="flex justify-between"><span class="text-slate-500">Immatriculation</span><span class="font-mono font-bold text-slate-800" id="inv-plate">RIP-666-GV</span></div>
+                            <div class="flex justify-between"><span class="text-slate-500">Lieu</span><span class="font-bold text-purple-700" id="inv-zone">Zone 666 - Chez Rippol</span></div>
+                            <div class="flex justify-between"><span class="text-slate-500">Début</span><span class="font-semibold text-slate-800" id="inv-start">12:28</span></div>
+                            <div class="flex justify-between"><span class="text-slate-500">Fin</span><span class="font-semibold text-slate-800" id="inv-end">13:28</span></div>
+                            <div class="flex justify-between"><span class="text-slate-500">Durée totale</span><span class="font-semibold text-slate-800" id="inv-duration">1h 00m</span></div>
+                        </div>
+
+                        <div class="border-t border-slate-200 pt-3 flex justify-between items-center">
+                            <span class="font-bold text-slate-800 text-sm">Montant réglé</span>
+                            <span class="font-black text-brand-600 text-lg" id="inv-price">2,00 €</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pt-4 shrink-0">
+                    <button onclick="resetToConfig()" class="w-full py-4 bg-vibes-gradient text-white rounded-xl font-extrabold hover:opacity-95 active:scale-[0.98] transition shadow-lg shadow-pink-500/25 flex items-center justify-center space-x-2">
+                        <i class="fa-solid fa-rotate-right text-xs"></i>
+                        <span>Nouveau stationnement</span>
+                    </button>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- Navigation Bottom Bar -->
+        <footer class="bg-white border-t border-slate-200 py-3 px-6 flex justify-around items-center text-slate-400 text-xs shrink-0 z-20">
+            <button onclick="goToConfig()" class="flex flex-col items-center space-y-1 text-brand-600" id="nav-btn-home">
+                <i class="fa-solid fa-house text-base"></i>
+                <span class="text-[10px] font-bold">Accueil</span>
+            </button>
+            <button onclick="openHistory()" class="flex flex-col items-center space-y-1 hover:text-brand-600 transition" id="nav-btn-history">
+                <i class="fa-solid fa-ticket text-base"></i>
+                <span class="text-[10px] font-bold">Tickets</span>
+            </button>
+            <button onclick="openAccountModal()" class="flex flex-col items-center space-y-1 hover:text-brand-600 transition" id="nav-btn-account">
+                <i class="fa-solid fa-user text-base"></i>
+                <span class="text-[10px] font-bold">Compte</span>
+            </button>
+        </footer>
+
+        <!-- Home Bar Indicator -->
+        <div class="bg-white pb-2 pt-1 flex justify-center shrink-0">
+            <div class="w-32 h-1 bg-slate-300 rounded-full"></div>
+        </div>
+
+    </div>
+
+    <!-- ================= MODALS ================= -->
+
+    <!-- History / Tickets Modal -->
+    <div id="modal-history" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="bg-white w-full sm:max-w-md rounded-t-3xl sm:rounded-3xl p-6 space-y-4 max-h-[80vh] overflow-y-auto shadow-2xl">
+            <div class="flex justify-between items-center">
+                <h3 class="font-bold text-slate-900 text-base">Historique ParkGoodVibes</h3>
+                <button onclick="closeHistory()" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div id="history-list" class="space-y-3">
+                <div class="p-3.5 rounded-xl border border-purple-100 bg-purple-50/50 space-y-1">
+                    <div class="flex justify-between text-xs font-bold text-slate-800">
+                        <span>Zone 666 - Chez Rippol</span>
+                        <span class="text-brand-600">2,00 €</span>
+                    </div>
+                    <div class="flex justify-between text-[11px] text-slate-500">
+                        <span>Plaque : RIP-666-GV</span>
+                        <span>Aujourd'hui</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Extend Parking Modal -->
+    <div id="modal-extend" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="bg-white w-full sm:max-w-md rounded-t-3xl sm:rounded-3xl p-6 space-y-4 shadow-2xl">
+            <div class="flex justify-between items-center">
+                <h3 class="font-bold text-slate-900 text-base">Prolonger Chez Rippol</h3>
+                <button onclick="closeExtendModal()" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <p class="text-xs text-slate-500">Ajouter du temps à votre session en Zone 666 :</p>
+            <div class="grid grid-cols-3 gap-2">
+                <button onclick="extendDuration(15)" class="py-3 rounded-xl border border-purple-200 font-bold text-xs bg-purple-50 text-purple-700 hover:bg-purple-100 transition">+15 min</button>
+                <button onclick="extendDuration(30)" class="py-3 rounded-xl border border-purple-200 font-bold text-xs bg-purple-50 text-purple-700 hover:bg-purple-100 transition">+30 min</button>
+                <button onclick="extendDuration(60)" class="py-3 rounded-xl border border-purple-200 font-bold text-xs bg-purple-50 text-purple-700 hover:bg-purple-100 transition">+1h00</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Account Modal -->
+    <div id="modal-account" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="bg-white w-full sm:max-w-md rounded-t-3xl sm:rounded-3xl p-6 space-y-4 shadow-2xl">
+            <div class="flex justify-between items-center">
+                <h3 class="font-bold text-slate-900 text-base">Compte ParkGoodVibes</h3>
+                <button onclick="closeAccountModal()" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="flex items-center space-x-3 bg-gradient-to-r from-purple-50 to-pink-50 p-3.5 rounded-2xl border border-purple-100">
+                <div class="w-12 h-12 rounded-full bg-vibes-gradient text-white font-black flex items-center justify-center text-lg shadow-md">GV</div>
+                <div>
+                    <div class="font-bold text-sm text-slate-900">Membre Good Vibes</div>
+                    <div class="text-xs text-purple-600 font-medium">rippol.fan@parkgoodvibes.fr</div>
+                </div>
+            </div>
+            <div class="space-y-2 text-xs">
+                <div class="p-3 bg-slate-50 rounded-xl flex justify-between items-center">
+                    <span class="text-slate-600">Véhicule favori</span>
+                    <span class="font-mono font-bold text-slate-800" id="account-plate-display">RIP-666-GV</span>
+                </div>
+                <div class="p-3 bg-slate-50 rounded-xl flex justify-between items-center">
+                    <span class="text-slate-600">Zone préférentielle</span>
+                    <span class="font-bold text-purple-700">Zone 666 - Chez Rippol</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- App JavaScript Logic -->
+    <script>
+        // Update live time clock in status bar
+        setInterval(() => {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            document.getElementById('current-time').innerText = `${hours}:${minutes}`;
+        }, 1000);
+
+        // State Management for ParkGoodVibes
+        let appState = {
+            zoneName: 'Zone 666 - Chez Rippol',
+            zoneCode: 'Zone 666',
+            ratePerHour: 2.00, // 2.00 €/h pour la Zone 666
+            plate: 'RIP-666-GV',
+            durationMins: 60,
+            totalPrice: 2.00,
+            paymentMethod: 'card',
+            startTime: null,
+            endTime: null,
+            remainingSeconds: 0,
+            timerInterval: null
+        };
+
+        window.onload = function() {
+            updateCalculations();
+        };
+
+        function formatPlate(input) {
+            input.value = input.value.toUpperCase();
+            appState.plate = input.value || 'RIP-666-GV';
+            document.getElementById('account-plate-display').innerText = appState.plate;
+        }
+
+        function saveDefaultPlate() {
+            showToast("Plaque par défaut enregistrée chez Rippol ! ✨");
+        }
+
+        function setDuration(mins) {
+            appState.durationMins = mins;
+            document.getElementById('duration-slider').value = mins;
+            
+            document.querySelectorAll('.duration-btn').forEach(btn => {
+                if(parseInt(btn.getAttribute('data-mins')) === mins) {
+                    btn.className = "duration-btn py-2 text-[11px] font-bold rounded-xl border-2 border-brand-500 bg-brand-50 text-brand-600 shadow-sm transition";
+                } else {
+                    btn.className = "duration-btn py-2 text-[11px] font-semibold rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:border-brand-500 hover:text-brand-600 transition";
+                }
+            });
+
+            updateCalculations();
+        }
+
+        function onSliderChange(val) {
+            appState.durationMins = parseInt(val);
+            document.querySelectorAll('.duration-btn').forEach(btn => {
+                btn.className = "duration-btn py-2 text-[11px] font-semibold rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:border-brand-500 hover:text-brand-600 transition";
+            });
+            updateCalculations();
+        }
+
+        function updateCalculations() {
+            const hours = appState.durationMins / 60;
+            appState.totalPrice = hours * appState.ratePerHour;
+
+            let badgeText = `${appState.durationMins} minutes`;
+            if(appState.durationMins >= 60) {
+                const h = Math.floor(appState.durationMins / 60);
+                const m = appState.durationMins % 60;
+                badgeText = m > 0 ? `${h}h ${m}m` : `${h} heure${h > 1 ? 's' : ''}`;
+            }
+            document.getElementById('duration-badge').innerText = badgeText;
+
+            const formattedPrice = appState.totalPrice.toFixed(2).replace('.', ',') + ' €';
+            document.getElementById('total-price-display').innerText = formattedPrice;
+
+            const now = new Date();
+            const end = new Date(now.getTime() + appState.durationMins * 60000);
+            document.getElementById('end-time-preview').innerText = `${String(end.getHours()).padStart(2, '0')}:${String(end.getMinutes()).padStart(2, '0')}`;
+        }
+
+        function proceedToPayment() {
+            const plateVal = document.getElementById('plate-input').value.trim();
+            if(!plateVal) {
+                showToast("Veuillez saisir votre plaque.");
+                return;
+            }
+            appState.plate = plateVal;
+
+            document.getElementById('pay-summary-zone').innerText = appState.zoneName;
+            document.getElementById('pay-summary-plate').innerText = appState.plate;
+            document.getElementById('pay-summary-duration').innerText = document.getElementById('duration-badge').innerText;
+            document.getElementById('pay-summary-price').innerText = appState.totalPrice.toFixed(2).replace('.', ',') + ' €';
+            document.getElementById('pay-btn').innerHTML = `<i class="fa-solid fa-heart text-xs"></i><span>Confirmer et payer ${appState.totalPrice.toFixed(2).replace('.', ',')} €</span>`;
+
+            switchScreen('screen-payment');
+        }
+
+        function goToConfig() {
+            switchScreen('screen-config');
+        }
+
+        function switchScreen(screenId) {
+            document.getElementById('screen-config').classList.add('hidden');
+            document.getElementById('screen-payment').classList.add('hidden');
+            document.getElementById('screen-active').classList.add('hidden');
+            document.getElementById('screen-invoice').classList.add('hidden');
+
+            document.getElementById(screenId).classList.remove('hidden');
+
+            if(screenId === 'screen-config') {
+                document.getElementById('header-subtitle').innerText = "Stationnement & Good Vibes";
+            } else if(screenId === 'screen-active') {
+                document.getElementById('header-subtitle').innerText = "Session Chez Rippol";
+            } else if(screenId === 'screen-invoice') {
+                document.getElementById('header-subtitle').innerText = "Reçu officiel ParkGoodVibes";
+            }
+        }
+
+        function selectPaymentMethod(method) {
+            appState.paymentMethod = method;
+            if(method === 'card') {
+                document.getElementById('pay-option-card').className = "bg-white p-4 rounded-2xl border-2 border-brand-600 shadow-sm flex items-center justify-between cursor-pointer transition";
+                document.getElementById('pay-option-card').querySelector('.w-5').className = "w-5 h-5 rounded-full bg-brand-600 flex items-center justify-center text-white text-[10px]";
+                
+                document.getElementById('pay-option-fastpay').className = "bg-white p-4 rounded-2xl border-2 border-slate-200 shadow-sm flex items-center justify-between cursor-pointer hover:border-slate-300 transition";
+                document.getElementById('pay-option-fastpay').querySelector('.w-5').className = "w-5 h-5 rounded-full border-2 border-slate-300 flex items-center justify-center text-transparent text-[10px]";
+            } else {
+                document.getElementById('pay-option-fastpay').className = "bg-white p-4 rounded-2xl border-2 border-brand-600 shadow-sm flex items-center justify-between cursor-pointer transition";
+                document.getElementById('pay-option-fastpay').querySelector('.w-5').className = "w-5 h-5 rounded-full bg-brand-600 flex items-center justify-center text-white text-[10px]";
+                
+                document.getElementById('pay-option-card').className = "bg-white p-4 rounded-2xl border-2 border-slate-200 shadow-sm flex items-center justify-between cursor-pointer hover:border-slate-300 transition";
+                document.getElementById('pay-option-card').querySelector('.w-5').className = "w-5 h-5 rounded-full border-2 border-slate-300 flex items-center justify-center text-transparent text-[10px]";
+            }
+        }
+
+        function executePayment() {
+            const btn = document.getElementById('pay-btn');
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin text-sm"></i><span>Envoi des Good Vibes...</span>`;
+
+            setTimeout(() => {
+                btn.disabled = false;
+                startActiveTicket();
+            }, 1000);
+        }
+
+        function startActiveTicket() {
+            const now = new Date();
+            appState.startTime = now;
+            appState.endTime = new Date(now.getTime() + appState.durationMins * 60000);
+            appState.remainingSeconds = appState.durationMins * 60;
+
+            document.getElementById('ticket-start-time').innerText = formatTimeObj(appState.startTime);
+            document.getElementById('ticket-end-time').innerText = formatTimeObj(appState.endTime);
+            document.getElementById('active-plate').innerText = appState.plate;
+            document.getElementById('active-zone').innerText = appState.zoneName;
+            document.getElementById('active-price').innerText = appState.totalPrice.toFixed(2).replace('.', ',') + ' €';
+
+            switchScreen('screen-active');
+
+            if(appState.timerInterval) clearInterval(appState.timerInterval);
+            appState.timerInterval = setInterval(updateCountdown, 1000);
+        }
+
+        function updateCountdown() {
+            if(appState.remainingSeconds > 0) {
+                appState.remainingSeconds--;
+
+                const hours = Math.floor(appState.remainingSeconds / 3600);
+                const minutes = Math.floor((appState.remainingSeconds % 3600) / 60);
+                const seconds = appState.remainingSeconds % 60;
+
+                document.getElementById('countdown-timer').innerText = 
+                    `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+
+                const totalSecs = appState.durationMins * 60;
+                const percent = (appState.remainingSeconds / totalSecs) * 100;
+                document.getElementById('timer-progress').style.width = `${percent}%`;
+
+                if(appState.remainingSeconds <= 300) {
+                    document.getElementById('low-time-alert').classList.remove('hidden');
+                }
+            } else {
+                clearInterval(appState.timerInterval);
+                stopParking();
+            }
+        }
+
+        function formatTimeObj(dateObj) {
+            return `${String(dateObj.getHours()).padStart(2, '0')}:${String(dateObj.getMinutes()).padStart(2, '0')}`;
+        }
+
+        function confirmStopParking() {
+            if(confirm("Quitter votre stationnement Chez Rippol ?")) {
+                stopParking();
+            }
+        }
+
+        function stopParking() {
+            if(appState.timerInterval) clearInterval(appState.timerInterval);
+            
+            document.getElementById('inv-plate').innerText = appState.plate;
+            document.getElementById('inv-zone').innerText = appState.zoneName;
+            document.getElementById('inv-start').innerText = formatTimeObj(appState.startTime || new Date());
+            document.getElementById('inv-end').innerText = formatTimeObj(new Date());
+            
+            const usedMins = Math.max(5, appState.durationMins - Math.floor(appState.remainingSeconds / 60));
+            const hoursPart = Math.floor(usedMins / 60);
+            const minsPart = usedMins % 60;
+            document.getElementById('inv-duration').innerText = `${hoursPart}h ${minsPart}m`;
+            document.getElementById('inv-price').innerText = appState.totalPrice.toFixed(2).replace('.', ',') + ' €';
+
+            switchScreen('screen-invoice');
+        }
+
+        function resetToConfig() {
+            document.getElementById('low-time-alert').classList.add('hidden');
+            setDuration(60);
+            switchScreen('screen-config');
+        }
+
+        function openHistory() { document.getElementById('modal-history').classList.remove('hidden'); }
+        function closeHistory() { document.getElementById('modal-history').classList.add('hidden'); }
+        
+        function openExtendModal() { document.getElementById('modal-extend').classList.remove('hidden'); }
+        function closeExtendModal() { document.getElementById('modal-extend').classList.add('hidden'); }
+        
+        function extendDuration(mins) {
+            appState.durationMins += mins;
+            appState.remainingSeconds += mins * 60;
+            
+            const newEnd = new Date(appState.endTime.getTime() + mins * 60000);
+            appState.endTime = newEnd;
+            document.getElementById('ticket-end-time').innerText = formatTimeObj(newEnd);
+
+            closeExtendModal();
+            showToast(`Good Vibes prolongées de ${mins} min ! ✨`);
+        }
+
+        function openAccountModal() { document.getElementById('modal-account').classList.remove('hidden'); }
+        function closeAccountModal() { document.getElementById('modal-account').classList.add('hidden'); }
+
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = "fixed top-12 left-1/2 transform -translate-x-1/2 bg-purple-950 text-purple-100 text-xs px-4 py-2.5 rounded-full shadow-2xl z-50 font-bold border border-purple-500/30 animate-in fade-in duration-200";
+            toast.innerText = message;
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                toast.remove();
+            }, 2500);
+        }
+    </script>
+</body>
+</html>
